@@ -1,29 +1,15 @@
 import Link from "next/link";
+import Board from "@/models/Board";
+import { connectDB } from "@/lib/mongodb";
 
 async function getBoards() {
-  try {
-    const res = await fetch(
-      "http://localhost:3000/api/boards",
-      {
-        cache: "no-store",
-      }
-    );
+  await connectDB();
 
-    const data = await res.json();
+  const boards = await Board.find();
 
-    console.log(
-      "BOARDS DATA:",
-      JSON.stringify(data)
-    );
-
-    return Array.isArray(data)
-      ? data
-      : [];
-  } catch (error) {
-    console.error(error);
-
-    return [];
-  }
+  return JSON.parse(
+    JSON.stringify(boards)
+  );
 }
 
 export default async function Dashboard() {
