@@ -1,14 +1,29 @@
 import Link from "next/link";
 
 async function getBoards() {
-  const res = await fetch(
-    "http://localhost:3000/api/boards",
-    {
-      cache: "no-store",
-    }
-  );
+  try {
+    const res = await fetch(
+      "http://localhost:3000/api/boards",
+      {
+        cache: "no-store",
+      }
+    );
 
-  return res.json();
+    const data = await res.json();
+
+    console.log(
+      "BOARDS DATA:",
+      JSON.stringify(data)
+    );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+  } catch (error) {
+    console.error(error);
+
+    return [];
+  }
 }
 
 export default async function Dashboard() {
